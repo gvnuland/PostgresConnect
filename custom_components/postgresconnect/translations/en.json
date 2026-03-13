@@ -4,8 +4,11 @@
             "user": {
                 "description": "PostgreSQL user to connect on server",
                 "data": {
+                    "dbserver": "DBServer",
+                    "port": "port",
                     "username": "Username",
-                    "password": "Password"
+                    "password": "Password",
+                    "database": "database"
                 }
             }
         },
