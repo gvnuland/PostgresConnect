@@ -9,17 +9,17 @@ if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.loader import Integration
 
-    from .api import IntegrationBlueprintApiClient
+    from .api import PostgresConnectApiClient
     from .coordinator import BlueprintDataUpdateCoordinator
 
 
-type IntegrationBlueprintConfigEntry = ConfigEntry[IntegrationBlueprintData]
+type PostgresConnectConfigEntry = ConfigEntry[PostgresConnectData]
 
 
 @dataclass
-class IntegrationBlueprintData:
+class PostgresConnectData:
     """Data for the Blueprint integration."""
 
-    client: IntegrationBlueprintApiClient
+    client: PostgresConnectApiClient
     coordinator: BlueprintDataUpdateCoordinator
     integration: Integration
