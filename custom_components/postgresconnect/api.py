@@ -1,13 +1,7 @@
-"""Sample API Client."""
-
 from __future__ import annotations
 
-import socket
-from typing import Any
-
-import aiohttp
-import async_timeout
-
+import psycopg2
+from typing import Optional
 
 class PostgresConnectApiClientError(Exception):
     """Exception to indicate a general API error."""
@@ -25,72 +19,51 @@ class PostgresConnectApiClientAuthenticationError(
     """Exception to indicate an authentication error."""
 
 
-def _verify_response_or_raise(response: aiohttp.ClientResponse) -> None:
-    """Verify that the response is valid."""
-    if response.status in (401, 403):
-        msg = "Invalid credentials"
-        raise PostgresConnectApiClientAuthenticationError(
-            msg,
-        )
-    response.raise_for_status()
-
-
 class PostgresConnectApiClient:
-    """Sample API Client."""
-
     def __init__(
         self,
+        dbserver: str,
+        port: int,
         username: str,
         password: str,
-        session: aiohttp.ClientSession,
+        database: str,
     ) -> None:
-        """Sample API Client."""
+        self._dbserver = dbserver
+        self._port = port
         self._username = username
         self._password = password
-        self._session = session
+        self._database = database
 
-    async def async_get_data(self) -> Any:
-        """Get data from the API."""
+    async def async_connect(self) -> Any:
         return await self._api_wrapper(
-            method="get",
-            url="https://jsonplaceholder.typicode.com/posts/1",
         )
 
-    async def async_set_title(self, value: str) -> Any:
+    async def async_execute_sql(self, sql: str) -> Any:
         """Get data from the API."""
         return await self._api_wrapper(
-            method="patch",
-            url="https://jsonplaceholder.typicode.com/posts/1",
-            data={"title": value},
-            headers={"Content-type": "application/json; charset=UTF-8"},
+            query=sql,
         )
 
     async def _api_wrapper(
         self,
-        method: str,
-        url: str,
-        data: dict | None = None,
-        headers: dict | None = None,
+        query: str,
     ) -> Any:
-        """Get information from the API."""
         try:
             async with async_timeout.timeout(10):
-                response = await self._session.request(
-                    method=method,
-                    url=url,
-                    headers=headers,
-                    json=data,
-                )
-                _verify_response_or_raise(response)
-                return await response.json()
+                conn = await psycopg2.connect(host=self._dbserver, port=self._port, dbname=self._database, user=self._username, password=self._password, target_session_attrs=read-write)
+
+                # Open a cursor to perform database operations
+                cur = conn.cursor()
+                # Execute a command: this creates a new table
+                cur.execute(query)
+
+                conn.commit()
+                cur.close()
+                conn.close()
+                return await "SUCCESS"
 
         except TimeoutError as exception:
-            msg = f"Timeout error fetching information - {exception}"
-            raise PostgresConnectApiClientCommunicationError(
-                msg,
-            ) from exception
-        except (aiohttp.ClientError, socket.gaierror) as exception:
-            msg = f"Error fetching information - {exception}"
+            msg = f"Timeout error - {exception}"
             raise PostgresConnectApiClientCommunicationError(
                 msg,
             ) from exception
