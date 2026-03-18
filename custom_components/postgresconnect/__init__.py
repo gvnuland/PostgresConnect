@@ -16,7 +16,7 @@ from homeassistant.loader import async_get_loaded_integration
 
 from .api import PostgresConnectApiClient
 from .const import DOMAIN, LOGGER
-from .coordinator import BlueprintDataUpdateCoordinator
+from .coordinator import PostgresConnectDataUpdateCoordinator
 from .data import PostgresConnectData
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ async def async_setup_entry(
     entry: PostgresConnectConfigEntry,
 ) -> bool:
     """Set up this integration using UI."""
-    coordinator = BlueprintDataUpdateCoordinator(
+    coordinator = PostgresConnectDataUpdateCoordinator(
         hass=hass,
         logger=LOGGER,
         name=DOMAIN,

@@ -46,7 +46,7 @@ class PostgresConnectApiClient:
 
     async def _api_wrapper(
         self,
-        query: str,
+        query: str="SELECT NOW()",
     ) -> Any:
         try:
             async with async_timeout.timeout(10):

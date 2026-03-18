@@ -1,5 +1,3 @@
-"""Switch platform for integration_blueprint."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -12,14 +10,14 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import BlueprintDataUpdateCoordinator
+    from .coordinator import PostgresConnectDataUpdateCoordinator
     from .data import PostgresConnectConfigEntry
 
 ENTITY_DESCRIPTIONS = (
     SwitchEntityDescription(
-        key="integration_blueprint",
-        name="Integration Switch",
-        icon="mdi:format-quote-close",
+        key="postgresconnect_switch",
+        name="Postgres Connection",
+        icon="mdi:database",
     ),
 )
 
@@ -40,11 +38,9 @@ async def async_setup_entry(
 
 
 class PostgresConnectSwitch(PostgresConnectEntity, SwitchEntity):
-    """integration_blueprint switch class."""
-
     def __init__(
         self,
-        coordinator: BlueprintDataUpdateCoordinator,
+        coordinator: PostgresConnectDataUpdateCoordinator,
         entity_description: SwitchEntityDescription,
     ) -> None:
         """Initialize the switch class."""

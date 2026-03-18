@@ -1,5 +1,3 @@
-"""Binary sensor platform for integration_blueprint."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -16,13 +14,13 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import BlueprintDataUpdateCoordinator
+    from .coordinator import PostgresConnectDataUpdateCoordinator
     from .data import PostgresConnectConfigEntry
 
 ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
-        key="integration_blueprint",
-        name="Integration Blueprint Binary Sensor",
+        key="postgresconnect_active",
+        name="Postgres Connection Active",
         device_class=BinarySensorDeviceClass.CONNECTIVITY,
     ),
 )
@@ -44,11 +42,9 @@ async def async_setup_entry(
 
 
 class PostgresConnectBinarySensor(PostgresConnectEntity, BinarySensorEntity):
-    """integration_blueprint binary_sensor class."""
-
     def __init__(
         self,
-        coordinator: BlueprintDataUpdateCoordinator,
+        coordinator: PostgresConnectDataUpdateCoordinator,
         entity_description: BinarySensorEntityDescription,
     ) -> None:
         """Initialize the binary_sensor class."""

@@ -1,5 +1,3 @@
-"""Sensor platform for integration_blueprint."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -12,14 +10,14 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import BlueprintDataUpdateCoordinator
+    from .coordinator import PostgresConnectDataUpdateCoordinator
     from .data import PostgresConnectConfigEntry
 
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
-        key="integration_blueprint",
-        name="Integration Sensor",
-        icon="mdi:format-quote-close",
+        key="postgresconnect_timestamp",
+        name="Postgres Timestamp",
+        icon="mdi:database-clock",
     ),
 )
 
@@ -40,11 +38,9 @@ async def async_setup_entry(
 
 
 class PostgresConnectSensor(PostgresConnectEntity, SensorEntity):
-    """integration_blueprint Sensor class."""
-
     def __init__(
         self,
-        coordinator: BlueprintDataUpdateCoordinator,
+        coordinator: PostgresConnectDataUpdateCoordinator,
         entity_description: SensorEntityDescription,
     ) -> None:
         """Initialize the sensor class."""
